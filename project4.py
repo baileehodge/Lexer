@@ -10,3 +10,5 @@ def read_file_contents(filepath):
 if __name__ == "__main__":
     input_contents = read_file_contents("Path to input file goes here")
     print(project4(input_contents))
+
+# did I mess things up...?
