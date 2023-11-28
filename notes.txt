@@ -1,0 +1,30 @@
+=====-Walter's review-=====
+number of natural joins = number of body predicates in a rule
+
+Algorithm summary - just one rule
+1. evaluate the predicates on the right hand side of the rule, store them in a list probably
+2. join the relations that result
+3. project the columns that appear in the head predicate
+4. rename the relation to make it union-compatible
+-union requires that the headers be the same (names can be different)
+-r1nameUr2name is one way to rename
+5. union with the relation in the database
+
+
+=====-Seth's review-=====
+interpret queries logic from project 3 can be pasted into an interpretPredicate function for project 4
+interpret the body predicates of a rule just like we interpret queries
+join all of the relations that result from the body predicates and you get a big fat relation
+it needs to be projected down to just the columns we care about
+rename that relation so that you can join it to the target relation
+
+Why do we care what was unique and what wasn't?
+
+How do we know if a relation has changed? We can check the size before and after
+
+Printing out he unique tuples each time is a pain in the butt because before it's joined, it's unique, and after it's added, we can't find it. In your union function, you can add functionality to check the size of the relation after each tuple is added and  keeps track of the unique tuples. Your Union function could return void, or you could have it return a list of unique tuples to have this functionality.
+
+In your database, there are as many relations as there are schemes. You make a bunch of temporary ones in the process, but they get merged and we don't keep track of them beyond that. The target relation is the relation you're trying to add rows to.
+
+
+vector of pairs translated to python: list of tuples
