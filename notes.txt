@@ -28,3 +28,8 @@ In your database, there are as many relations as there are schemes. You make a b
 
 
 vector of pairs translated to python: list of tuples
+
+
+etc 
+-join was just a combination of the other functions we wrote
+-hang out in the TA lab and you'll get your questions answered

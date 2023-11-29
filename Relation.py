@@ -31,6 +31,74 @@ class Relation:
             length = len(self.header.values)
             raise ValueError("Tuple was not the same length as Header of length {length}")
         self.toople.add(toople)
+        
+######################################################
+
+    def can_join_tooples(self, toople1: Toople, toople2: Toople, overlap: list[tuple[int,int]]) -> bool:
+        for x,y in overlap:
+            if toople1.values[x] != toople2.values[y]:
+                return False
+        return True
+        
+    def join_tooples(self, toople1: Toople, toople2: Toople, unique_cols_1: list[int]) -> Toople:
+        toople_values: list[str] = []
+        for x in unique_cols_1:
+            toople_values.append(toople1.values[x])
+        toople_values.extend(toople2.values)
+        return Toople(toople_values)
+        
+        # append puts an item at the end of a list
+        # extend ads a list to the end of another list
+        
+    def join_headers(self, header1: Header, header2: Header, unique_cols_1: list[int]) -> Header:
+        header_values: list[str] = []
+        for x in unique_cols_1:
+            header_values.append(header1.values[x])
+        header_values.extend(header2.values)
+        return Toople(header_values)
+        
+    def natural_join(self, other: 'Relation') -> 'Relation':
+        r1: Relation = self
+        r2: Relation = other
+        
+        overlap: list[tuple(int,int)] = []
+        unique_cols_1: list[int] = []
+        
+        
+        for x in range(len(r1.header.values)):
+            is_unique: bool = True
+            for y in range(len(r2.header.values)):
+                if r1.header.values[x] == r2.header.values[y]:
+                    overlap.append(tuple([x,y]))
+                    is_unique = False
+                if is_unique:
+                    unique_cols_1.append(x)
+        
+        # calculate the correct values for overlap, and unique_cols_1
+                    
+        # make the header h for the result relation
+        #     (combine r1's header with r2's header)
+        h: Header = self.join_headers(r1.header, r2.header, unique_cols_1)
+        # make a new empty relation r using header h
+        result: Relation = Relation(r1.name + "|x|" + r2.name, h, set())
+        for t1 in r1.toople:
+            for t2 in r2.toople:
+                if self.can_join_tooples(t1, t2, overlap):
+                    result_Toople = self.join_tooples(t1, t2, unique_cols_1)
+                    result.add_toople(result_Toople)
+
+        # 	if t1 and t2 can join
+        # 	    join t1 and t2 to make tuple t
+        # 	    add tuple t to relation r
+        # 	end if
+
+        #     end for
+        # end for
+        
+        return result
+        
+        
+######################################################
     
     def select1(self, value: str, index: int) -> 'Relation':
         # Select type 1 will take an index and a constant value

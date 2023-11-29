@@ -11,7 +11,10 @@ class Toople:
         #casting it to a tuple so that we can hash the value directly rather than the memory address
     
     def __lt__(self, other: 'Toople') -> bool:
-        return self.values < other.values
+        return self.values < other.values  # <=  like the demo code?
         
     def by_list(ele: 'Toople'): 
         return ele.values
+    
+    def __str__(self) -> str:
+        return f"{', '.join(self.values)}"

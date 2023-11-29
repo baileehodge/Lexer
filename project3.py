@@ -33,5 +33,5 @@ def read_file_contents(filepath):
 
 #Use this to run and debug code within VS
 if __name__ == "__main__":
-    input_contents = read_file_contents("project3-passoff/100/input5.txt")
+    input_contents = read_file_contents("/project4-passoff/100/input5.txt")
     project3(input_contents)
