@@ -10,3 +10,4 @@ class Rule():
         temp_str += " :- "
         temp_str += ','.join([i.to_string() for i in self.body_predicates])
         return temp_str
+

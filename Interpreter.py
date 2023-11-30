@@ -21,7 +21,7 @@ class Interpreter:
         self.datalog_program: Datalog = datalog_program
         self.interpret_schemes()
         self.interpret_facts()
-        # self.interpret_rules()
+        self.interpret_rules()
         self.interpret_queries()
         return self.output_str
     
@@ -185,6 +185,17 @@ class Interpreter:
     def interpret_rules(self) -> None:
         # fixed point algorithm to evaluate rules goes here:
         # this will call evaluate_rule over and over again
+        changed: bool = True
+        
+        while (changed):
+            changed = False
+            for rule in self.datalog_program.rules:
+                size_change = self.evaluate_rule(rule)
+                if size_change > 0:
+                    changed = True
+                print("beep beep\n")
+        
+        
         pass
     
     # this function should return the number of unique tuples added to the database
@@ -271,21 +282,22 @@ class Interpreter:
         #   in the corresponding position in the relation 
         #   that matches the head of the rule.
         
-        the_intermediate_result = the_intermediate_result.rename(rule.head_predicate)
+        result = the_intermediate_result.rename(rule.head_predicate)
 
 
         # Step 5:
         # Union with the relation in the database:
+        data_relation: Relation = self.database.get_relation(rule.head_predicate.name)
 
         # Save the size of the database relation before calling union
-        size_before: int = 0
-        
+        size_before: len(data_relation.toople)
         # Union the result from Step 4 with the relation 
         # in the database whose name matches the name of the head of the rule.
+        data_relation.natural_join(result)  # is this supposed to call a union function?
         
         
         # Save the size of the database relation after calling union
-        size_after: int = 10
+        size_after: len(data_relation.toople)
         # int = len(rel.rows) or something like that
         
         return size_after - size_before

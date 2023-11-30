@@ -22,7 +22,7 @@ def project4(input: str) -> str:
     datalog_program: Datalog = parser.get_program()
     
     interpreter: Interpreter = Interpreter()
-    #print(interpreter.run(datalog_program))
+    print(interpreter.run(datalog_program))
 
     return interpreter.run(datalog_program)
 

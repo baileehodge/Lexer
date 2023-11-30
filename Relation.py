@@ -84,8 +84,8 @@ class Relation:
         for t1 in r1.toople:
             for t2 in r2.toople:
                 if self.can_join_tooples(t1, t2, overlap):
-                    result_Toople = self.join_tooples(t1, t2, unique_cols_1)
-                    result.add_toople(result_Toople)
+                    result_toople = self.join_tooples(t1, t2, unique_cols_1)
+                    result.add_toople(result_toople)
 
         # 	if t1 and t2 can join
         # 	    join t1 and t2 to make tuple t
@@ -178,3 +178,4 @@ class Relation:
             new_tooples.add(Toople(new_values))
             
         return Relation(new_name, new_header, new_tooples)
+    
