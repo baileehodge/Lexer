@@ -7,6 +7,7 @@ from typing import Dict
 # imports from project 2
 from project_2.datalog import Datalog
 from project_2.predicate import Predicate
+from project_2.rule import Rule
 from project_2.token import Token
 from project_2.lexer_fsm import LexerFSM
 from project_2.parse import Parser
@@ -155,47 +156,7 @@ class Interpreter:
 
 
 #################################################################
-# bad code below
-# ⊂_ヽ
-# 　 ＼＼
-# 　　 ＼( ͡° ͜ʖ ͡°)
-# 　　　 >　⌒ヽ
-# 　　　/ 　 へ＼
-# 　　 /　　/　＼＼
-# 　　 ﾚ　ノ　　 ヽ_つ
-# 　　/　/
-# 　 /　/|
-# 　(　(ヽ
-# 　|　|、＼
-# 　| 丿 ＼ ⌒)
-# 　| |　　) /
-# ノ )　　Lﾉ
-# (_／
-    # def evaluate_queries(self) -> None:
-    #         for query in self.datalog_program.queries:
-    #             relation = self.database.get_relation(query.name)
-    #             variable_first_occurrence = {}
 
-    #             # Select for constants and duplicate variables
-    #             for i, parameter in enumerate(query.parameters):
-    #                 if parameter.is_id():
-    #                     relation = relation.select1(i, parameter.value)
-    #                 elif not parameter.is_id():
-    #                     if parameter.value not in variable_first_occurrence:
-    #                         variable_first_occurrence[parameter.value] = i
-    #                     else:
-    #                         relation = relation.select2(i, variable_first_occurrence[parameter.value])
-    
-    #             # Project operation
-    #             indices_to_project = list(variable_first_occurrence.values())
-    #             relation = relation.project(indices_to_project)
-
-    #             # Rename operation
-    #             new_header_labels = [query.parameters[i].value for i in indices_to_project]
-    #             relation = relation.rename(new_header_labels)
-
-    #             # Output the resulting relation (can be modified based on requirements)
-    #             return relation  
 # ──────────██▄▄───────
 # ──────────██▀▀───────
 # ────────▄███▄────────
@@ -227,7 +188,7 @@ class Interpreter:
         pass
     
     # this function should return the number of unique tuples added to the database
-    def evaluate_rule(self, rule: Predicate) -> int:
+    def evaluate_rule(self, rule: Rule) -> int:
         # Step 1:
         
         # Evaluate the predicates on the right-hand side of the rule (the body predicates):
@@ -246,6 +207,12 @@ class Interpreter:
         # Example:
         # for body_predicate in rule.body:
         # result = self.evaluate_predicate(body_predicate))
+        intermediate_results: list[Relation] = []
+        the_intermediate_result: Relation = None
+        
+        for body_predicate in enumerate(rule.body_predicates):
+            result = self.evaluate_predicate(body_predicate) #returns a relation
+            intermediate_results.append(result)
 
         # Step 2:
         # Join the relations that result:
@@ -259,6 +226,18 @@ class Interpreter:
 
         # If there is a single predicate on the right hand side of the rule, 
         # use the single intermediate result from Step 1 as the result for Step 2.
+        
+        if len(intermediate_results) > 1:
+            the_intermediate_result = intermediate_results[0] 
+
+            for next_result in intermediate_results[1:]:
+                the_intermediate_result = the_intermediate_result.natural_join(next_result)
+        elif len(intermediate_results) == 1:
+            the_intermediate_result = intermediate_results[0]
+        else:
+            print("Error 404, no body predicates found\n")
+            the_intermediate_result = result
+        
 
         # Step 3:
         # Project the columns that appear in the head predicate:
@@ -269,6 +248,18 @@ class Interpreter:
         #   than those in the body. Use a project operation on the result from 
         #   Step 2 to remove the columns that don't appear in the head of the 
         #   rule and to reorder the columns to match the order in the head.
+        
+        variable_first_occurrence = {}
+        keep_i: list[int] = []
+        
+        for i, param in enumerate(rule.head_predicate.parameters):
+            if param.is_id and param.value not in variable_first_occurrence:
+                variable_first_occurrence[param.value] = i
+                keep_i.append(i)
+                
+
+        the_intermediate_result = the_intermediate_result.project(keep_i) #call it with a list of integers... how do we get the integers? in the head predicate. It's all the parameters that are a variable
+
 
         # Step 4:
         # Rename the relation to make it union-compatible:
@@ -279,6 +270,9 @@ class Interpreter:
         #   in the result from Step 3 to the attribute name found 
         #   in the corresponding position in the relation 
         #   that matches the head of the rule.
+        
+        the_intermediate_result = the_intermediate_result.rename(rule.head_predicate)
+
 
         # Step 5:
         # Union with the relation in the database:

@@ -153,19 +153,12 @@ class Relation:
         return Relation(new_name, new_header, new_tooples)
 
     def rename(self, new_header: Header) -> 'Relation':
-    # make an empty relation
-    # fill the relation
-    # return the relation
         new_name = self.name
         new_tooples = self.toople
         
         return Relation(new_name, new_header, new_tooples)
         
     def project(self, col_indices: list[int]) -> 'Relation':
-    # make an empty relation
-    # fill the relation
-    # return the relation
-    
         #checks that the index is in range
         for index in col_indices: 
             if index >= len(self.header.values) | index < 0:
