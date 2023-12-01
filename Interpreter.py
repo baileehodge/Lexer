@@ -53,7 +53,7 @@ class Interpreter:
     def interpret_queries(self) -> None:
         # for each query in the datalog_program call evaluate predicate.
         # append the predicate returned by this function to the output string
-        
+        self.output_str += "Query Evaluation\n"
         for query in self.datalog_program.queries:
             result_relation = self.evaluate_predicate(query)
             self.output_str += query.to_string() + "? "
@@ -185,7 +185,9 @@ class Interpreter:
     def interpret_rules(self) -> None:
         # fixed point algorithm to evaluate rules goes here:
         # this will call evaluate_rule over and over again
+        self.output_str += "Rule Evaluation\n"
         changed: bool = True
+        passes: int = 0
         
         while (changed):
             changed = False
@@ -193,13 +195,35 @@ class Interpreter:
                 size_change = self.evaluate_rule(rule)
                 if size_change > 0:
                     changed = True
-                print("beep beep\n")
+            passes += 1
         
+        self.output_str += f"\nSchemes populated after {passes} passes through the Rules.\n\n"
         
         pass
     
     # this function should return the number of unique tuples added to the database
     def evaluate_rule(self, rule: Rule) -> int:
+        #print head
+        head_pred_params: str = ""
+        for i, param in enumerate(rule.head_predicate.parameters):
+            head_pred_params += f"{param.value}"
+            if i < len(rule.head_predicate.parameters) - 1:
+                head_pred_params += ","
+        self.output_str += f"{rule.head_predicate.name}({head_pred_params}) :- "
+        #print body
+        for i, pred in enumerate(rule.body_predicates):
+            self.output_str += f"{pred.name}("
+            for j, param in enumerate(pred.parameters):
+                self.output_str += f"{param.value}"
+                if j < len(pred.parameters) - 1:
+                    self.output_str += ","
+            
+            self.output_str += ")"
+            if i < len(rule.body_predicates) - 1:
+                self.output_str += ","
+        
+        self.output_str += f".\n"
+        
         # Step 1:
         
         # Evaluate the predicates on the right-hand side of the rule (the body predicates):
@@ -221,7 +245,7 @@ class Interpreter:
         intermediate_results: list[Relation] = []
         the_intermediate_result: Relation = None
         
-        for body_predicate in enumerate(rule.body_predicates):
+        for body_predicate in rule.body_predicates:
             result = self.evaluate_predicate(body_predicate) #returns a relation
             intermediate_results.append(result)
 
@@ -282,22 +306,34 @@ class Interpreter:
         #   in the corresponding position in the relation 
         #   that matches the head of the rule.
         
-        result = the_intermediate_result.rename(rule.head_predicate)
+        data_relation: Relation = self.database.get_relation(rule.head_predicate.name)
+        
+        result = the_intermediate_result.rename(data_relation.header)
 
 
         # Step 5:
         # Union with the relation in the database:
-        data_relation: Relation = self.database.get_relation(rule.head_predicate.name)
 
         # Save the size of the database relation before calling union
-        size_before: len(data_relation.toople)
+        size_before = len(data_relation.toople)
+        print(f"size before is {size_before}\n")
         # Union the result from Step 4 with the relation 
         # in the database whose name matches the name of the head of the rule.
-        data_relation.natural_join(result)  # is this supposed to call a union function?
+        new_tooples: str = ""
+        new_tooples = data_relation.union(result)
+        self.output_str += new_tooples
         
+        #print new tooples
         
         # Save the size of the database relation after calling union
-        size_after: len(data_relation.toople)
+        size_after = len(data_relation.toople)
+        print(f"size after is {size_after}\n")
         # int = len(rel.rows) or something like that
         
         return size_after - size_before
+    
+    
+    
+    
+    # fixed point algorithm only passes through the rules once
+    # theory: union function doesn't actually add tooples to the database relation

@@ -29,7 +29,7 @@ class Relation:
     def add_toople(self, toople: Toople) -> None:
         if len(toople.values) != len(self.header.values):
             length = len(self.header.values)
-            raise ValueError("Tuple was not the same length as Header of length {length}")
+            raise ValueError(f"Tuple was not the same length as Header of length {length}")
         self.toople.add(toople)
         
 ######################################################
@@ -60,6 +60,7 @@ class Relation:
     def natural_join(self, other: 'Relation') -> 'Relation':
         r1: Relation = self
         r2: Relation = other
+        
         
         overlap: list[tuple(int,int)] = []
         unique_cols_1: list[int] = []
@@ -96,6 +97,25 @@ class Relation:
         # end for
         
         return result
+    
+    def union(self, other: 'Relation') -> str: 
+        #returns a formatted string of unique tuples
+        #like natural join, but this time we actually change the database        
+        new_tooples_str: str = ""
+        self.header
+
+        for toople in other.toople:
+            if toople not in self.toople:
+                self.toople.add(toople)
+                for i, value in enumerate(toople.values):
+                    new_tooples_str += f" {self.header.values[0]}={value}"
+                    if i != 0 and i != len(toople.values) - 1:
+                        new_tooples_str += ","
+                    if i == len(toople.values)-1:
+                        new_tooples_str += "\n"
+
+                    #if i is not 0 or the same as the length, aka the last boi, add a comma
+        return new_tooples_str
         
         
 ######################################################
