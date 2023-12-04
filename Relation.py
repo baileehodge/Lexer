@@ -74,6 +74,10 @@ class Relation:
                     is_unique = False
                 if is_unique:
                     unique_cols_1.append(x)
+                    
+        
+        #Change function call to join_headers(?). Change it so that it uses overlap instead of unique_cols_1. Use overlap to make a more accurate unique_cols ? We want to tell join_headers which columns of which relations
+        #update: determined that this modification would likely be unnecessary
         
         # calculate the correct values for overlap, and unique_cols_1
                     
@@ -98,25 +102,17 @@ class Relation:
         
         return result
     
-    def union(self, other: 'Relation') -> str: 
-        #returns a formatted string of unique tuples
-        #like natural join, but this time we actually change the database        
-        new_tooples_str: str = ""
-        self.header
-
-        for toople in other.toople:
-            if toople not in self.toople:
-                self.toople.add(toople)
-                for i, value in enumerate(toople.values):
-                    new_tooples_str += f" {self.header.values[0]}={value}"
-                    if i != 0 and i != len(toople.values) - 1:
-                        new_tooples_str += ","
-                    if i == len(toople.values)-1:
-                        new_tooples_str += "\n"
-
-                    #if i is not 0 or the same as the length, aka the last boi, add a comma
-        return new_tooples_str
+    def union(self, other: 'Relation') -> list[Toople]: 
+        #returns a list of unique tuples
+        #like natural_join, but this time we actually change the database        
+        new_tooples_list: list[Toople] = []
+        #print(f"Type of self.header.values: {type(self.header.values)}")
         
+        for toople in other.toople: 
+            if toople not in self.toople: 
+                self.toople.add(toople)
+                new_tooples_list.append(toople)
+        return new_tooples_list
         
 ######################################################
     

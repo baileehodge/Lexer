@@ -288,9 +288,12 @@ class Interpreter:
         keep_i: list[int] = []
         
         for i, param in enumerate(rule.head_predicate.parameters):
-            if param.is_id and param.value not in variable_first_occurrence:
-                variable_first_occurrence[param.value] = i
-                keep_i.append(i)
+            for j, para in enumerate(the_intermediate_result.header.values):
+                if param.value == para:
+                    keep_i.append(j)
+                    if param.value not in variable_first_occurrence:
+                        variable_first_occurrence[param.value] = i
+                    
                 
 
         the_intermediate_result = the_intermediate_result.project(keep_i) #call it with a list of integers... how do we get the integers? in the head predicate. It's all the parameters that are a variable
@@ -316,18 +319,18 @@ class Interpreter:
 
         # Save the size of the database relation before calling union
         size_before = len(data_relation.toople)
-        print(f"size before is {size_before}\n")
+        ##print(f"size before is {size_before}\n")
         # Union the result from Step 4 with the relation 
         # in the database whose name matches the name of the head of the rule.
-        new_tooples: str = ""
+        new_tooples: list[Toople] = []
         new_tooples = data_relation.union(result)
-        self.output_str += new_tooples
-        
+        print_relation = Relation("", Header([p.value for p in result.header.values]), new_tooples)
+        self.output_str += print_relation.__str__()
         #print new tooples
         
         # Save the size of the database relation after calling union
         size_after = len(data_relation.toople)
-        print(f"size after is {size_after}\n")
+        ##print(f"size after is {size_after}\n")
         # int = len(rel.rows) or something like that
         
         return size_after - size_before

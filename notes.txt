@@ -1,12 +1,19 @@
+12/3/23
+The issue is that when the input text has 2 or more rules, the program starts to make little mistakes. These mistakes often look like a repetition of one answer as the answer for the next few equations. 
+--100/input2 and 100/input5 have more than one rule but the program executes correctly. One commonality is that these rules are all named with single letters. Other inputs that fail also share this principle.
+--The program passes 4 of the inputs in each bucket.
+
+Theories: 
+-a function (probably union) joining things incorrectly
+---union seems chill
+-an issue with calling the function for each rule
+-"joining three or more relations" in the TA help slides
+
+
+===================================================
+
 11/30/23 eod notes
 most things are running great. the only obstacle I can currently see is that of adding the header value to the output string in the union method. I'm referencing it in a way that should work from what I can tell, but it gives me a predicate object instead of the value of a header. Possible solution: move a fat chunk of the string-making out of the union function and into interpret.py right after it calls union. I (hopefully) know exactly how to access those letters; I'd just have to make them lowercase somehow. it's also possible that I'd be able to access the header values in interpreter.py the way I'm trying to in the union method. 
-
-
-
-
-
-
-
 
 =====-Walter's review-=====
 number of natural joins = number of body predicates in a rule

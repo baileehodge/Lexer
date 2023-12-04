@@ -6,6 +6,11 @@ class Toople:
     def __eq__(self, other: 'Toople') -> bool:
         return self.values == other.values
         
+    # def __eq__(self, other):
+    #     if isinstance(other, Toople):
+    #         return self.values == other.values
+    #     return False
+        
     def __hash__(self) -> int:
         return hash(tuple(self.values))
         #casting it to a tuple so that we can hash the value directly rather than the memory address
