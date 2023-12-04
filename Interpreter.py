@@ -323,6 +323,8 @@ class Interpreter:
         # Union the result from Step 4 with the relation 
         # in the database whose name matches the name of the head of the rule.
         new_tooples: list[Toople] = []
+        print_relation: Relation = ''
+        
         new_tooples = data_relation.union(result)
         print_relation = Relation("", Header([p.value for p in result.header.values]), new_tooples)
         self.output_str += print_relation.__str__()

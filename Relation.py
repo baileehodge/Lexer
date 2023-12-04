@@ -56,6 +56,8 @@ class Relation:
             header_values.append(header1.values[x])
         header_values.extend(header2.values)
         return Toople(header_values)
+    
+    
         
     def natural_join(self, other: 'Relation') -> 'Relation':
         r1: Relation = self
@@ -72,8 +74,8 @@ class Relation:
                 if r1.header.values[x] == r2.header.values[y]:
                     overlap.append(tuple([x,y]))
                     is_unique = False
-                if is_unique:
-                    unique_cols_1.append(x)
+            if is_unique:
+                unique_cols_1.append(x)
                     
         
         #Change function call to join_headers(?). Change it so that it uses overlap instead of unique_cols_1. Use overlap to make a more accurate unique_cols ? We want to tell join_headers which columns of which relations
