@@ -11,12 +11,10 @@ def project1(input: str) ->str:
         tokens += token.to_string()
         tokens += "\n" 
 
-    #TODO: make this print the undefined thing when it's undefined
     if (token.token_type != "UNDEFINED"):    
         len_tokens = str(len(lexer.tokens))
         tokens += 'Total Tokens = ' + len_tokens
     else:
-        #TODO this vvv line does not work, obviously
         line_num = str(token.line)
         tokens += '\nTotal Tokens = Error on line ' + line_num
 

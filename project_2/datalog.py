@@ -36,12 +36,7 @@ class Datalog():
         # sort the set and put it in a list. DONE
         # format it like a domain list
         # add the list to the master string. DONE
-        
-        # unique_domains = set(domains)
-        # sorted_domains = sorted(unique_domains)
-        # final_domains_string = ",\n".join(sorted_domains)
-        # master_string += final_domains_string
-        
+
         # Sort the domains alphabetically
         sorted_domains = sorted(set(domains))
         #print(sorted_domains)

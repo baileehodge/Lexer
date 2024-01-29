@@ -64,8 +64,6 @@ class Parser():
         try:
             datalog_items: Datalog = self.parse_datalogProgram()
             return "Success!\n" + datalog_items.to_string()
-            # scheme: Predicate = self.parse_scheme()
-            # return "Success!\n" + scheme.to_string()      
         except ValueError as ve:
             return f"Failure!\n  {ve}"
         
@@ -114,11 +112,8 @@ class Parser():
         
     # ruleList -> fact, ruleList | lambda
     def parse_ruleList(self):
-        #rules: list[Rule] = []
         
         if self.get_curr_token().token_type == "ID":
-            #rules.append(self.parse_rule())
-            #rules.extend(self.parse_ruleList())
             self.parse_rule()
             self.parse_ruleList()
             return
@@ -173,14 +168,12 @@ class Parser():
 
 
     # rule -> headPredicate COLON_DASH predicate predicateList PERIOD
-    #TODO: Fix
     def parse_rule(self):
         temp: Rule()
         
         temp_pred: Predicate = self.parse_headPredicate()
         self.match("COLON_DASH")
         temp_pred_list: list[Predicate] = [self.parse_predicate()]
-        #temp_pred_list.extend(self.parse_predicateList())
         new_preds: list[Predicate] = self.parse_predicateList()
         for predicate in new_preds:
                 temp_pred_list.append(predicate)
@@ -233,8 +226,6 @@ class Parser():
             self.match("COMMA")
             first_pred: list[Predicate] = [self.parse_predicate()]
             pred_list: list[Predicate] = self.parse_predicateList()
-            #return first_pred + pred_list
-            #return_val = first_pred.extend(pred_list)
             for predicate in pred_list:
                 first_pred.append(predicate)
             return first_pred
@@ -280,32 +271,16 @@ class Parser():
 
     # idList  	-> 	COMMA ID idList | lambda
     def parse_idList(self) -> list[Parameter]:
-        # the first set is {COMMA} << TODO: add a similar statement in all functions
         if self.get_curr_token().token_type == "COMMA":
             self.match("COMMA")
             self.match("ID")
             p = Parameter(self.get_prev_token_value(), True)
             p_list: list[Parameter] = []
             p_list.append(p)
-            #what else?
-            #curr_id: list[str] = [self.get_prev_token_value()]
-            # [Name]
-            #rest_ids: list[str] = self.parse_idList()
             temp_list: list[Parameter] = self.parse_idList()
             if (len(temp_list) != 0 ):
                 p_list.extend(temp_list)
             return p_list
-            
-            # [Address, PhoneNumber]
-            #return curr_id + rest_ids
-            # -> [Name, Address, PhoneNumber]
-        
-        #lambda
         else:
             return []
         
-        
-        
-        #remeber to add () or to_string and other functions
-        
-        # detailed plan

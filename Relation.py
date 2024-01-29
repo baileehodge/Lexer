@@ -47,9 +47,6 @@ class Relation:
         toople_values.extend(toople2.values)
         return Toople(toople_values)
         
-        # append puts an item at the end of a list
-        # extend ads a list to the end of another list
-        
     def join_headers(self, header1: Header, header2: Header, unique_cols_1: list[int]) -> Header:
         header_values: list[str] = []
         for x in unique_cols_1:
@@ -77,10 +74,6 @@ class Relation:
             if is_unique:
                 unique_cols_1.append(x)
                     
-        
-        #Change function call to join_headers(?). Change it so that it uses overlap instead of unique_cols_1. Use overlap to make a more accurate unique_cols ? We want to tell join_headers which columns of which relations
-        #update: determined that this modification would likely be unnecessary
-        
         # calculate the correct values for overlap, and unique_cols_1
                     
         # make the header h for the result relation
@@ -94,14 +87,7 @@ class Relation:
                     result_toople = self.join_tooples(t1, t2, unique_cols_1)
                     result.add_toople(result_toople)
 
-        # 	if t1 and t2 can join
-        # 	    join t1 and t2 to make tuple t
-        # 	    add tuple t to relation r
-        # 	end if
-
-        #     end for
-        # end for
-        
+    
         return result
     
     def union(self, other: 'Relation') -> list[Toople]: 
@@ -183,9 +169,7 @@ class Relation:
                 raise ValueError
     
         new_name = self.name
-        #temp_list: list[str] = [self.header.values[i] for i in col_indices]
         temp_list: list[str] = [self.header.values[i] for i in col_indices if 0 <= i < len(self.header.values)] 
-        #will this cause issues later? (T_T)
 
         new_header = Header(temp_list)
         new_tooples = set()

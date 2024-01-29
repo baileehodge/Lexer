@@ -19,15 +19,7 @@ class Predicate:
             raise StopIteration
     
     def to_string(self):
-        # param_count: int = 0
-        # param_str: str = self.name
-        # param_str += "("
-        # for i in self.parameters:
-        #     temp: str = str(i.value)
-        #     param_str += temp
-        #     param_count += 1
-        #     if param_count != len(self.parameters):
-        #         param_str += ","
+
         param_str = self.name + "("
         param_values = [str(param.value) for param in self.parameters]
         param_str += ",".join(param_values)
@@ -40,7 +32,3 @@ class Predicate:
         return param_str
 
 
-        # param_str += ")"
-        # param_str = ','.join(self.parameters.to_string())
-        # return(f'{self.name}({param_str})')
-        # return param_str

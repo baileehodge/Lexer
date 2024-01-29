@@ -70,12 +70,10 @@ class LexerFSM:
                 max_automaton = "UNDEFINED"
 
             # create the token associated with the max automaton
-            # prev token_type = max_automaton.get_name()
             if max_automaton != "UNDEFINED":
                 token_type = max_automaton.token_type
             else:
                 token_type = "UNDEFINED"
-            # token_value = input[:max_read]
             token_value = input[:max_read].rstrip('\n')
             token = Token(token_type, token_value, line_num)
             self.tokens.append(token)
